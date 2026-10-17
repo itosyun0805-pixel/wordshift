@@ -1,0 +1,30 @@
+{
+  "name": "WORDSHIFT ─ 言葉を装備するRPG",
+  "short_name": "WORDSHIFT",
+  "description": "世界55の「訳しにくい言葉」を装備して旅する、16bit風のRPG。言葉で戦い、言葉で謎を解く。でも言葉は、ときにレッテルにもなる。ブラウザで無料で遊べます。",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#070912",
+  "theme_color": "#070912",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

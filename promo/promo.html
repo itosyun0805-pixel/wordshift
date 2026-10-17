@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=540">
+<title>WORDSHIFT promo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Press+Start+2P&display=swap">
+</head>
+<body>
+<div id="stage">
+  <div id="top"><div class="plogo">WORDSHIFT</div><div id="cap"></div></div>
+  <div id="gamewrap"></div>
+  <div id="chip"></div>
+  <div id="endcard"><div class="eclogo">WORDSHIFT</div><div class="ecsub">言葉を装備して、<br>世界の見え方が変わるRPG</div>
+    <div class="ecfeat"><span>世界の言葉 55語</span><span>全13章</span><span>方言・オノマトペ</span></div>
+    <div class="ecplay">ブラウザで、いますぐ無料プレイ</div><div class="ecurl">itosyun0805-pixel.github.io/wordshift</div><div class="ecnote">スマホでもPCでも ・ インストール不要</div></div>
+</div>
+<script>
+(async () => {
+  // pull the game's styles and screen markup out of the real index.html so the promo plays the actual game
+  const html = await (await fetch('../index.html')).text();
+  for (const m of html.matchAll(/<style>([\s\S]*?)<\/style>/g)) { const s = document.createElement('style'); s.textContent = m[1]; document.head.appendChild(s); }
+  const app = html.slice(html.indexOf('<div id="app">'), html.indexOf('<script'));
+  document.getElementById('gamewrap').innerHTML = app;
+  const promoCss = document.createElement('style');
+  promoCss.textContent = `
+    html, body { height: 960px; width: 540px; margin: 0; overflow: hidden; }
+    body { background: #070912 !important; }
+    #stage { position: relative; width: 540px; height: 960px; overflow: hidden;
+      background: radial-gradient(ellipse at 50% 20%, #24306a 0%, #0d1230 45%, #070912 80%); }
+    #stage::before { content: ''; position: absolute; inset: 0; opacity: .5; pointer-events: none;
+      background-image: radial-gradient(1px 1px at 40px 60px, #fff, transparent), radial-gradient(1px 1px at 300px 110px, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 480px 200px, #ffe9a0, transparent), radial-gradient(1px 1px at 120px 820px, #fff, transparent),
+        radial-gradient(1.5px 1.5px at 420px 760px, #ffe9a0, transparent), radial-gradient(1px 1px at 220px 900px, #fff, transparent); }
+    #top { position: absolute; left: 0; right: 0; top: 118px; text-align: center; }
+    .plogo { font-family: "Press Start 2P", monospace; font-size: 30px; letter-spacing: 1px;
+      background: linear-gradient(180deg, #fff6d0 0%, #ffd56a 45%, #c98a20 55%, #ffe39a 100%); -webkit-background-clip: text; background-clip: text; color: transparent;
+      filter: drop-shadow(0 2px 0 #3a2208) drop-shadow(0 0 10px rgba(255,190,80,.4)); }
+    #cap { margin: 16px 18px 0; min-height: 76px; font-family: "DotGothic16", sans-serif; font-size: 25px; line-height: 1.45; color: #fff;
+      text-shadow: 0 2px 0 #000; transition: opacity .25s, transform .25s; white-space: pre-line; }
+    #cap.out { opacity: 0; transform: translateY(6px); }
+    #cap b { color: #ffcf5a; font-weight: normal; } #cap i { color: #ff8d7d; font-style: normal; }
+    #gamewrap { position: absolute; left: 12px; top: 280px; width: 516px; }
+    #gamewrap #app { height: auto; padding: 0; gap: 0; display: block; }
+    #gamewrap #pad, #gamewrap #keys, #track { display: none !important; }
+    #screen { box-shadow: 0 0 0 3px #3a4aa0, 0 0 0 7px #0c0f22, 0 24px 60px rgba(0,0,0,.7) !important; }
+    #chip { position: absolute; left: 0; right: 0; top: 700px; text-align: center; font-family: "DotGothic16", sans-serif; font-size: 19px; color: #c8d0f0; transition: opacity .25s; }
+    #chip span { display: inline-block; padding: 6px 16px; border-radius: 99px; background: rgba(255,207,90,.14); box-shadow: inset 0 0 0 1.5px rgba(255,207,90,.6); color: #ffe6a6; }
+    #endcard { position: absolute; inset: 0; z-index: 99; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; text-align: center;
+      background: radial-gradient(ellipse at 50% 40%, rgba(36,48,106,.97), rgba(7,9,18,.99)); opacity: 0; pointer-events: none; transition: opacity .6s; font-family: "DotGothic16", sans-serif; color: #fff; }
+    #endcard.on { opacity: 1; }
+    .eclogo { font-family: "Press Start 2P", monospace; font-size: 40px; background: linear-gradient(180deg, #fff6d0 0%, #ffd56a 45%, #c98a20 55%, #ffe39a 100%);
+      -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 3px 0 #3a2208) drop-shadow(0 0 14px rgba(255,190,80,.5)); }
+    .ecsub { font-size: 26px; line-height: 1.5; }
+    .ecfeat { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; padding: 0 20px; }
+    .ecfeat span { font-size: 17px; padding: 5px 12px; border-radius: 99px; background: rgba(255,255,255,.1); box-shadow: inset 0 0 0 1.5px rgba(242,238,226,.4); }
+    .ecplay { margin-top: 18px; font-size: 24px; color: #10121c; background: #ffcf5a; padding: 12px 26px; border-radius: 12px; box-shadow: 0 4px 0 #8a5a10; }
+    .ecurl { font-size: 18px; color: #6fe0cc; }
+    .ecnote { font-size: 16px; color: #9aa3c8; }
+  `;
+  document.head.appendChild(promoCss);
+  try { localStorage.clear(); } catch (e) { }
+  for (const f of ['audio', 'gfx', 'ui', 'data', 'act2', 'act3', 'main']) {
+    await new Promise((res, rej) => { const s = document.createElement('script'); s.src = `../js/${f}.js`; s.onload = res; s.onerror = rej; document.body.appendChild(s); });
+  }
+  window.dispatchEvent(new Event('DOMContentLoaded'));
+  const size = () => { const sc = document.getElementById('screen'); sc.style.width = '516px'; sc.style.height = '387px'; sc.style.setProperty('--u', (516 / 256) + 'px'); };
+  size(); window.fit = size; try { localStorage.clear(); } catch (e) { }
+  window.__ready = true;
+})();
+
+/* ---------------- choreography ---------------- */
+const W = ms => new Promise(r => setTimeout(r, ms));
+const capEl = () => document.getElementById('cap');
+async function cap(html, chip) {
+  const c = capEl(); c.classList.add('out'); await W(220); c.innerHTML = html; c.classList.remove('out');
+  document.getElementById('chip').innerHTML = chip ? `<span>${chip}</span>` : '';
+}
+const topUI = () => UIST[UIST.length - 1];
+const tap = () => { const t = topUI(); if (t) t('A'); };
+async function waitFor(fn, ms = 8000) { const t0 = performance.now(); while (!fn() && performance.now() - t0 < ms) await W(40); }
+async function walk(dir, ms) { held[dir] = 1; lastDir = dir; await W(ms); held[dir] = 0; await waitFor(() => !P.moving, 1000); }
+const ent = id => ents.find(e => e.id === id);
+const sayDone = () => { const t = topUI(); return t && t.tap && document.querySelector('#msg .next') && !document.querySelector('#msg .next').hidden; };
+
+const MARK = {}; let T0 = 0; const mark = k => { MARK[k] = (performance.now() - T0) / 1000; };
+const clearToasts = () => { document.getElementById('toasts').innerHTML = ''; };
+async function startDemo() {
+  T0 = performance.now(); Audio8.init();
+  let rec = null, chunks = [];
+  try { const st = Audio8.stream(); rec = new MediaRecorder(st, { mimeType: 'audio/webm;codecs=opus' }); rec.ondataavailable = e => chunks.push(e.data); rec.start(); } catch (e) { console.warn('no audio rec', e); }
+  Audio8.play('title');
+
+  // 1) title
+  mark('title'); await cap('知らない言葉が、\n<b>まだ見ぬ世界への扉</b>になる。');
+  await W(2000);
+
+  // 2) walking the harbor town
+  UIST.length = 0; document.getElementById('title').hidden = true; titleMode = false;
+  S = newState(); S.flags.linaMet = 1; S.flags.tutBattle = 1; S.lv = 6; S.maxhp = S.hp = 60;
+  loadMap('town', 17, 14, 'right'); renderHUD();
+  await cap('言葉を<b>装備</b>して、\n世界の見え方が変わるRPG', '16bit風 × ことばの冒険');
+  mark('walk'); await walk('right', 1300); await walk('down', 350);
+
+  // 3) a merchant teaches a word -> NEW WORD ACQUIRED
+  placePlayer(24, 23, 'down'); P.dir = 'down';
+  busy = true;
+  await cap('出会った人から、\n<b>「訳しにくい言葉」</b>を手に入れる', '世界の言葉 55語');
+  say(ent('marco'), 'それはね……ポルトガルの言葉で «Saudade» って言うんだ。'); await W(1500); tap(); await W(100);
+  hideMsg(); S.words.push('saudade'); S.mast.saudade = 0; mark('acq'); showAcq('saudade'); await W(2400); tap(); await W(150);
+
+  // 4) the word opens a new choice
+  S.equipped = ['saudade']; renderHUD(); placePlayer(9, 25, 'down');
+  await cap('装備した言葉で、\n<b>新しい選択肢</b>が生まれる');
+  say(ent('lina'), 'どうして、あの人のことを思い出すと、嬉しいのに悲しくなるんだろう……？', { keep: true, instant: true }); await W(500);
+  mark('choice'); const pick = choose([{ t: '悲しいんだね' }, { t: '忘れた方がいいよ' }, { t: 'その人との時間が、今も大切なんだね', word: 'saudade' }]);
+  await W(500); topUI()('DOWN'); await W(300); topUI()('DOWN'); await W(600); topUI()('A'); await pick;
+  say(ent('lina'), '……そうかもしれない。一緒に過ごした時間が、大切だったから。'); await W(1600); tap(); hideMsg();
+
+  // 5) ...but words can become labels
+  placePlayer(12, 25, 'right'); ent('gil').dir = 'left';
+  await cap('でも、言葉は<i>レッテル</i>にもなる。', '合わない言葉は、相手の顔を覆ってしまう');
+  say(ent('gil'), '……は？'); await W(600); tap(); hideMsg();
+  mark('label'); await showStamp('saudade', '漁師ギル'); S.labels.gil = 'saudade';
+  narr('あなたは、ギルを理解した気になった。'); await W(1400); tap(); hideMsg(); clearToasts();
+  busy = false;
+
+  // 6) battle
+  await cap('<b>言葉で戦う</b>バトル\n響かせて、コンボをつなげ！', 'RESONANCE ・ CRITICAL ・ ひらめきクイズ');
+  S.combo = 4;
+  const auto = setInterval(() => { const t = topUI(); if (t && t.tap && sayDone()) t('A'); }, 380);
+  run(async () => { await battle('homesick', { area: 'town' }); });
+  await waitFor(() => BT && !document.getElementById('choice').hidden && document.querySelector('#choice .opt') && document.querySelector('#choice').textContent.includes('きく'), 6000);
+  BT.hp = 18; await W(500);
+  [...document.querySelectorAll('#choice .opt')].find(o => o.textContent.includes('ことば')).click();
+  await waitFor(() => document.querySelector('#choice') && document.querySelector('#choice').textContent.includes('SAUDADE'), 3000); await W(400);
+  mark('hit'); const realRandom = Math.random; Math.random = () => 0.05;
+  [...document.querySelectorAll('#choice .opt')].find(o => o.textContent.includes('SAUDADE')).click();
+  await W(1500); Math.random = realRandom;
+  await waitFor(() => !BT, 9000); clearInterval(auto);
+  await waitFor(() => !busy, 4000); UIST.length = 0; hideMsg(); busy = false; clearToasts();
+
+  // 7) montage of the lands
+  for (const k of ['corridor', 'ruins', 'isle', 'valley', 'ono', 'fest', 'future']) MAPS[k].bgm = 'town';
+  await cap('方言・オノマトペ・思考実験\n<b>全13章</b>の、ことばの旅', 'ガヴァガイの島 ・ 方言の谷 ・ しまくとぅばの島 …');
+  S.cor = 2; S.ruin = 0; S.equipped = ['saudade'];
+  const shots = [['corridor', 7, 6, 'up'], ['ruins', 7, 9, 'up'], ['isle', 13, 12, 'up'], ['valley', 24, 8, 'up'], ['ono', 11, 8, 'up'], ['fest', 14, 7, 'up'], ['future', 12, 8, 'up']];
+  mark('montage'); for (const [m, x, y, d] of shots) { loadMap(m, x, y, d); clearToasts(); await W(560); }
+
+  // 8) end card
+  mark('end'); document.getElementById('endcard').classList.add('on'); await cap('');
+  await W(3200); mark('fin');
+  if (rec) { await new Promise(r => { rec.onstop = r; rec.stop(); }); await fetch('/upload?name=audio.webm', { method: 'POST', body: new Blob(chunks, { type: 'audio/webm' }) }); }
+  window.__marks = MARK; window.__done = true;
+}
+</script>
+</body>
+</html>

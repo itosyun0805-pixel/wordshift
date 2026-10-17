@@ -1,0 +1,4 @@
+.DS_Store
+promo/out/
+release/
+__pycache__/
