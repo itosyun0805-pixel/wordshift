@@ -719,7 +719,7 @@ function showTitle() {
   paint();
 }
 function toTitle() { showTitle(); }
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.0.1';
 const REPO_URL = 'https://github.com/itosyun0805-pixel/wordshift';
 function showCredits() {
   const c = $('#compose');
@@ -771,11 +771,29 @@ async function showEnding(sub = 'THE END', lead = '知らない言葉が、ま�
 }
 
 /* ---------- layout ---------- */
+let SAFE = null;
+function safeInsets() {
+  if (!SAFE) { SAFE = document.createElement('div'); SAFE.style.cssText = 'position:fixed;visibility:hidden;pointer-events:none;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px)'; document.body.appendChild(SAFE); }
+  const c = getComputedStyle(SAFE); return { t: parseFloat(c.paddingTop) || 0, r: parseFloat(c.paddingRight) || 0, b: parseFloat(c.paddingBottom) || 0, l: parseFloat(c.paddingLeft) || 0 };
+}
 function fit() {
   const touch = matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window;
-  document.body.classList.toggle('touch', touch);
-  const padH = touch ? Math.min(210, innerHeight * 0.34) : 34;
-  let w = Math.min(innerWidth - 32, 800, (innerHeight - padH - 30) * 4 / 3);
+  const phone = touch && Math.min(innerWidth, innerHeight) < 600;   // phones only: tablets keep the normal layout
+  const land = phone && innerWidth > innerHeight;
+  const b = document.body.classList;
+  b.toggle('touch', touch); b.toggle('phone', phone); b.toggle('land', land);
+  let w, overlay = false;
+  if (land) {
+    // landscape phone: screen as tall as possible, d-pad and A/B in the side margins (or overlaid when they don't fit)
+    const s = safeInsets(), H = innerHeight - s.t - s.b - 8, side = 150;
+    const wSide = Math.min(H * 4 / 3, innerWidth - s.l - s.r - side * 2);
+    if (wSide * 3 / 4 >= H * 0.82) w = wSide;
+    else { overlay = true; w = Math.min(H * 4 / 3, innerWidth - s.l - s.r - 16); }
+  } else {
+    const padH = touch ? Math.min(210, innerHeight * 0.34) + (phone ? 22 : 0) : 34;
+    w = Math.min(innerWidth - 32, 800, (innerHeight - padH - 30) * 4 / 3);
+  }
+  b.toggle('overlay', overlay);
   w = Math.max(240, Math.floor(w));
   const sc = $('#screen'); sc.style.width = w + 'px'; sc.style.height = Math.round(w * 0.75) + 'px'; sc.style.setProperty('--u', (w / 256) + 'px');
 }
@@ -799,10 +817,11 @@ function setupPad() {
   ['#msg', '#lensbox', '#acq'].forEach(s => $(s).addEventListener('click', tapAdvance));
   $('#hud').addEventListener('click', () => { if (!busy && !UIST.length && !titleMode) openMenu(); });
   $('#track').addEventListener('click', showHint);
-  document.addEventListener('pointerdown', () => Audio8.init(), { once: true });
+  for (const ev of ['touchend', 'click', 'keydown', 'pointerup']) document.addEventListener(ev, () => Audio8.unlock(), { passive: true, capture: true });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) Audio8.init(); });
 }
 function boot() {
-  buildTiles(); buildIcons(); fit(); addEventListener('resize', fit); setupPad();
+  buildTiles(); buildIcons(); fit(); addEventListener('resize', fit); addEventListener('orientationchange', () => { fit(); setTimeout(fit, 350); }); setupPad();
   showTitle();
   let last = performance.now();
   const frame = now => {

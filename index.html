@@ -390,6 +390,19 @@ button { font: inherit; color: inherit; }
 #pad { display: none; width: 100%; max-width: 480px; justify-content: space-between; align-items: center; gap: 12px; flex: none; }
 body.touch #pad { display: flex; }
 body.touch #app { justify-content: space-evenly; }
+#rot { display: none; font-size: 12px; color: #9aa3c8; text-align: center; }
+body.phone:not(.land) #rot { display: block; }
+/* landscape phone: big screen in the middle, controls in the side margins */
+body.land #app { padding: 0; gap: 0; justify-content: center; }
+body.land #pad { position: fixed; inset: 0; z-index: 90; display: block; max-width: none; pointer-events: none; }
+body.land #pad > * { pointer-events: auto; }
+body.land #dpad { position: absolute; left: calc(env(safe-area-inset-left, 0px) + 12px); bottom: calc(env(safe-area-inset-bottom, 0px) + 14px); }
+body.land .ab { position: absolute; right: calc(env(safe-area-inset-right, 0px) + 8px); bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); }
+body.land .mid { position: absolute; right: calc(env(safe-area-inset-right, 0px) + 20px); top: calc(env(safe-area-inset-top, 0px) + 12px); }
+body.land.overlay #dpad, body.land.overlay .ab { opacity: .5; }
+body.land.overlay #dpad { transform: scale(.82); transform-origin: left bottom; }
+body.land.overlay .ab { transform: scale(.82); transform-origin: right bottom; }
+body.land.overlay .mid { opacity: .75; }
 #keys { flex: none; font-size: 12px; color: #7a82a8; text-align: center; }
 body.touch #keys { display: none; }
 #dpad { position: relative; width: 132px; height: 132px; flex: none; touch-action: none; border-radius: 50%; background: radial-gradient(circle, #1a2048 0%, #10142e 70%); box-shadow: inset 0 0 0 2px #2a3266; }
@@ -446,6 +459,7 @@ body.touch #keys { display: none; }
     <div class="mid"><button type="button" class="pbtn menu" data-b="MENU">MENU</button></div>
     <div class="ab"><button type="button" class="pbtn ab1 b" data-b="B">B</button><button type="button" class="pbtn ab1 a" data-b="A">A</button></div>
   </div>
+  <div id="rot">スマホを横向きにすると、大きな画面で遊べます</div>
   <div id="keys">矢印 / WASD：移動　Z / Enter：話す・決定　X / Esc：もどる　C：ことばメニュー　H：ヒント</div>
 </div>
 

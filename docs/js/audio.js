@@ -1,6 +1,8 @@
 // WORDSHIFT — tiny chiptune engine (WebAudio). BGM per area + SFX.
 const Audio8 = (() => {
   let ctx = null, master, mus, sfxG, noiseBuf = null;
+  let silentEl = null, unlocked = false, ttsPrimed = false;
+  const SILENT_WAV = 'data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YZABAACAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA';
   let bgmOn = true, seOn = true, pending = null;
   let cur = null, timer = null, step = 0, nextT = 0;
   const SEMI = { C: 0, 'C#': 1, Db: 1, D: 2, 'D#': 3, Eb: 3, E: 4, F: 5, 'F#': 6, Gb: 6, G: 7, 'G#': 8, Ab: 8, A: 9, 'A#': 10, Bb: 10, B: 11 };
@@ -204,6 +206,17 @@ const Audio8 = (() => {
       if (!timer) timer = setInterval(tick, 25);
     },
     stop() { cur = null; },
+    // Mobile browsers only start audio from a user gesture, and iOS keeps Web Audio silent while the ring/silent
+    // switch is on unless the page is in the "playback" audio session. Call this from every tap/click/key.
+    unlock() {
+      this.init(); if (!ctx) return;
+      if (unlocked && ctx.state === 'running') return;
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) { }
+      try { if (ctx.state !== 'running') ctx.resume(); const b = ctx.createBuffer(1, 1, 22050), src = ctx.createBufferSource(); src.buffer = b; src.connect(ctx.destination); src.start(0); } catch (e) { }
+      try { if (!silentEl) { silentEl = new Audio(SILENT_WAV); silentEl.setAttribute('playsinline', ''); silentEl.preload = 'auto'; } const p = silentEl.play(); if (p) p.catch(() => { }); } catch (e) { }
+      try { if (!ttsPrimed && 'speechSynthesis' in window) { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; speechSynthesis.speak(u); ttsPrimed = true; } } catch (e) { }
+      unlocked = ctx.state === 'running';
+    },
     stream() { if (!ctx) this.init(); if (!ctx) return null; const d = ctx.createMediaStreamDestination(); master.connect(d); return d.stream; },
     sfx(name) { if (!ctx || !seOn || !SFX[name]) return; SFX[name](ctx.currentTime + 0.01); },
     duck(sec) {

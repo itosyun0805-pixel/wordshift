@@ -129,6 +129,7 @@ self.addEventListener('activate', e => {{ e.waitUntil(caches.keys().then(ks => P
 self.addEventListener('fetch', e => {{
   const u = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
+  if (e.request.mode === 'navigate') {{ e.respondWith(fetch(e.request).then(res => {{ const c = res.clone(); caches.open(CACHE).then(k => k.put('index.html', c)); return res; }}).catch(() => caches.match('index.html'))); return; }}
   if (u.origin === location.origin) {{ e.respondWith(caches.match(e.request).then(r => r || fetch(e.request))); return; }}
   if (/fonts\\.(googleapis|gstatic)\\.com$/.test(u.hostname)) {{
     e.respondWith(caches.open(CACHE).then(c => c.match(e.request).then(r => r || fetch(e.request).then(res => {{ c.put(e.request, res.clone()); return res; }}))));
